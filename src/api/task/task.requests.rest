@@ -1,0 +1,37 @@
+
+// Crear una nueva task.
+POST http://localhost:3050/api/tasks
+content-type: application/json
+
+{
+    "task_desc": "Descripcion PRUEBA",
+    "task_done": false,
+    "task_location": "Ubicacion"
+}
+
+###
+
+// Obtener todas las task.
+GET http://localhost:3050/api/tasks
+
+###
+
+// Obtener una task por ID.
+GET http://localhost:3050/api/tasks/1
+
+###
+
+// Actualizar una task.
+PUT http://localhost:3050/api/tasks/4
+content-type: application/json
+
+{
+    "task_desc": "Descripcion",
+    "task_done": false,
+    "task_location": "Ubicacion"
+}
+
+###
+
+// Borrar una task.
+DELETE http://localhost:3050/api/tasks/5
