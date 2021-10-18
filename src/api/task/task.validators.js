@@ -1,21 +1,21 @@
 const { check } = require('express-validator');
 
 const createTask = [
-    check('task_desc').exists().isString().trim(),
-    check('task_done').exists().isBoolean(),
-    check('task_location').exists().isString().trim(),
+    check('description').exists().isString().trim(),
+    check('done').exists().isBoolean(),
+    check('location').exists().isObject(),
 ];
 
-const getTaskByID = [check('task_id').exists().isInt()];
+const getTaskByID = [check('id').exists()];
 
 const updateTask = [
-    check('task_desc').exists().isString().trim(),
-    check('task_done').exists().isBoolean(),
-    check('task_location').exists().isString().trim(),
-    check('task_id').exists().isInt(),
+    check('description').exists().isString().trim(),
+    check('done').exists().isBoolean(),
+    check('location').exists().isObject(),
+    check('id').exists(),
 ];
 
-const deleteTask = [check('task_id').exists().isInt()];
+const deleteTask = [check('id').exists()];
 
 module.exports = {
     createTask,

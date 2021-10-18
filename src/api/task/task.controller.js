@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const taskService = require('./task.service');
+const Task = require('./task.model');
 
 const createTask = async (req, res) => {
     // Controlando errores en lo recibido mediante la request.
@@ -8,12 +9,18 @@ const createTask = async (req, res) => {
         return res.status(422).send(errors.array());
     }
 
-    // Guardando en una variable el objeto recibido.
-    const task = req.body;
+    const task = new Task({
+        description: req.body.description,
+        done: req.body.done,
+        location: {
+            lat: req.body.location.lat,
+            lon: req.body.location.lon,
+        },
+    });
 
     try {
         const results = await taskService.createTask(task);
-        res.status(200).send(results);
+        res.status(201).send(results);
     } catch (error) {
         console.log(error.message);
         res.status(500).send(error.message);
@@ -36,10 +43,14 @@ const getTaskByID = async (req, res) => {
         return res.status(422).send(errors.array());
     }
 
-    const { task_id } = req.params;
+    const { id } = req.params;
     try {
-        const results = await taskService.getTaskByID(task_id);
-        res.status(200).send(results);
+        const results = await taskService.getTaskByID(id);
+        if (results.data) {
+            res.status(200).send(results);
+        } else {
+            res.status(404).send(results);
+        }
     } catch (error) {
         console.log(error.message);
         res.status(500).send(error.message);
@@ -53,10 +64,10 @@ const updateTask = async (req, res) => {
     }
 
     const task = req.body;
-    const { task_id } = req.params;
+    const { id } = req.params;
 
     try {
-        const results = await taskService.updateTask(task, task_id);
+        const results = await taskService.updateTask(task, id);
         res.status(200).send(results);
     } catch (error) {
         console.log(error.message);
@@ -70,9 +81,9 @@ const deleteTask = async (req, res) => {
         return res.status(422).send(errors.array());
     }
 
-    const { task_id } = req.params;
+    const { id } = req.params;
     try {
-        const results = await taskService.deleteTask(task_id);
+        const results = await taskService.deleteTask(id);
         res.status(200).send(results);
     } catch (error) {
         console.log(error.message);

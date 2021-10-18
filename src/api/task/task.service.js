@@ -1,77 +1,81 @@
 const db = require('../../db');
 const queries = require('./task.queries');
+const Task = require('./task.model');
 
 const createTask = (task) => {
-    return new Promise((resolve, reject) => {
-        db.query(queries.CREATE_TASK, [task], (error, results) => {
-            if (error) reject(error);
+    return new Promise(async (resolve, reject) => {
+        try {
+            const newTask = await task.save();
             resolve({
                 success: true,
-                data: task,
+                data: newTask,
             });
-        });
+        } catch (error) {
+            reject(error);
+        }
     });
 };
 
 const getTasks = () => {
-    return new Promise((resolve, reject) => {
-        db.query(queries.GET_TASKS, (error, results) => {
-            if (error) reject(error);
-            if (results.length > 0) {
-                resolve({
-                    success: true,
-                    data: results,
-                });
-            } else {
-                resolve({
-                    success: true,
-                    data: [],
-                });
-            }
-        });
+    return new Promise(async (resolve, reject) => {
+        try {
+            const tasks = await Task.find();
+            resolve({
+                success: true,
+                data: tasks,
+            });
+        } catch (error) {
+            reject(error);
+        }
     });
 };
 
-const getTaskByID = (task_id) => {
-    return new Promise((resolve, reject) => {
-        db.query(queries.GET_TASK_BY_ID, [task_id], (error, results) => {
-            if (error) reject(error);
-            if (results.length > 0) {
-                resolve({
-                    success: true,
-                    data: results,
-                });
-            } else {
-                resolve({
-                    success: true,
-                    data: [],
-                });
-            }
-        });
-    });
-};
-
-const updateTask = (task, task_id) => {
-    return new Promise((resolve, reject) => {
-        db.query(queries.UPDATE_TASK, [task, task_id], (error, results) => {
-            if (error) reject(error);
+const getTaskByID = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const task = await Task.findById(id);
             resolve({
                 success: true,
                 data: task,
             });
-        });
+        } catch (error) {
+            reject(error);
+        }
     });
 };
 
-const deleteTask = (task_id) => {
-    return new Promise((resolve, reject) => {
-        db.query(queries.DELETE_TASK, [task_id], (error, results) => {
-            if (error) reject(error);
+const updateTask = (task, id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const reference = (await getTaskByID(id)).data;
+
+            reference.description = task.description;
+            reference.done = task.done;
+            reference.location = task.location;
+
+            const updatedTask = await reference.save();
+            resolve({
+                success: true,
+                data: updatedTask,
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const deleteTask = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const task = await getTaskByID(id);
+            await task.data.remove();
             resolve({
                 success: true,
                 data: null,
             });
-        });
+        } catch (error) {
+            reject(error);
+        }
     });
 };
 
