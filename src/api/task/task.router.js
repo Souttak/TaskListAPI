@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const validator = require('./task.validators');
 
+// Importando los controladores y definiendo los endpoint que los usarán.
 const task = require('./task.controller');
 
 router.post('/', validator.createTask, task.createTask);

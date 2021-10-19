@@ -1,10 +1,10 @@
 const db = require('../../db');
-const queries = require('./task.queries');
 const Task = require('./task.model');
 
 const createTask = (task) => {
     return new Promise(async (resolve, reject) => {
         try {
+            // Utilizamos el mismo objeto que instanciamos en el controlador para añadirlo a la DB.
             const newTask = await task.save();
             resolve({
                 success: true,
@@ -47,6 +47,8 @@ const getTaskByID = (id) => {
 const updateTask = (task, id) => {
     return new Promise(async (resolve, reject) => {
         try {
+            // Obtenemos la task de la DB, para cambiar sus atributos y volver a guardarla.
+            // Como podemos ver, MongoDB funciona totalmente apegado al modelo orientado a objetos.
             const reference = (await getTaskByID(id)).data;
 
             reference.description = task.description;
@@ -67,8 +69,8 @@ const updateTask = (task, id) => {
 const deleteTask = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const task = await getTaskByID(id);
-            await task.data.remove();
+            const task = (await getTaskByID(id)).data;
+            await task.remove();
             resolve({
                 success: true,
                 data: null,

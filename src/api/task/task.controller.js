@@ -1,4 +1,6 @@
 const { validationResult } = require('express-validator');
+
+// Importando los servicios y el modelo que creamos para las task.
 const taskService = require('./task.service');
 const Task = require('./task.model');
 
@@ -9,6 +11,7 @@ const createTask = async (req, res) => {
         return res.status(422).send(errors.array());
     }
 
+    // Instanciando una nueva task mediante el modelo, con los input recibidos en la request.
     const task = new Task({
         description: req.body.description,
         done: req.body.done,
@@ -44,6 +47,7 @@ const getTaskByID = async (req, res) => {
     }
 
     const { id } = req.params;
+
     try {
         const results = await taskService.getTaskByID(id);
         if (results.data) {

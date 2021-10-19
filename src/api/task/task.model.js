@@ -1,5 +1,7 @@
-const { Double } = require('mongodb');
 const mongoose = require('mongoose');
+
+// Creando un esquema para las tareas. Sirve para validar los inputs del usuario, definir
+// la estructura que tendrán en la propia DB, y controlar los propios datos.
 
 const taskSchema = new mongoose.Schema({
     description: {
@@ -15,11 +17,11 @@ const taskSchema = new mongoose.Schema({
         required: true,
 
         lat: {
-            type: Double,
+            type: Number,
             required: true,
         },
         lon: {
-            type: Double,
+            type: Number,
             required: true,
         },
     },

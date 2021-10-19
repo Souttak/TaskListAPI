@@ -1,12 +1,12 @@
-// El paquete "dotenv" se encarga de cargar automáticamente las variables de entorno desde el archivo
-// .env al objeto process.env de nuestro proceso, encargado de almacenar las variables globales.
+// Cargando las variables del ".env"
 require('dotenv').config();
 
-// Importando librerías e instanciando lo básico.
+// Importando librerías y el router principal.
 const express = require('express');
 const bodyParser = require('body-parser');
 const routes = require('./api/routes');
 
+// Instanciando la aplicación de Express y guardando el puerto a utilizar desde la variable de entorno.
 const app = express();
 const port = process.env.PORT || 3050;
 
